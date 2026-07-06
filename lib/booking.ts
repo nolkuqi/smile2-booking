@@ -179,6 +179,30 @@ function isExclusionViolation(err: unknown): boolean {
   );
 }
 
+/** Kommende bestätigte Termine (für die Studio-Übersicht), aufsteigend sortiert. */
+export async function listUpcomingAppointments(days = 30) {
+  const db = getDb();
+  const now = new Date();
+  const until = new Date(now.getTime() + days * 24 * 3600_000);
+  return db
+    .select({
+      appointment: schema.appointments,
+      treatment: schema.treatments,
+      customer: schema.customers,
+    })
+    .from(schema.appointments)
+    .innerJoin(schema.treatments, eq(schema.appointments.treatmentId, schema.treatments.id))
+    .innerJoin(schema.customers, eq(schema.appointments.customerId, schema.customers.id))
+    .where(
+      and(
+        eq(schema.appointments.status, "confirmed"),
+        gt(schema.appointments.endsAt, now),
+        lt(schema.appointments.startsAt, until),
+      ),
+    )
+    .orderBy(asc(schema.appointments.startsAt));
+}
+
 export async function getAppointmentByToken(token: string) {
   const db = getDb();
   const [row] = await db
