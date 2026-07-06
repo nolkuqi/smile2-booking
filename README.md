@@ -30,8 +30,12 @@ npm run dev                  # http://localhost:3000
 ```
 
 ```bash
-npm run lint    # ESLint
-npm run build   # Produktions-Build
+npm run lint       # ESLint
+npm run typecheck  # TypeScript
+npm test           # Vitest (Unit-Tests)
+npm run build      # Produktions-Build
+npm run db:migrate # SQL-Migrationen anwenden (braucht DATABASE_URL)
+npm run db:seed    # Behandlungen & Öffnungszeiten einspielen
 ```
 
 ## Branching-Strategie
