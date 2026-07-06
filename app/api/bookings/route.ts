@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { bookAppointment, getAppointmentByToken } from "@/lib/booking";
-import { sendBookingConfirmation } from "@/lib/notifications";
+import { sendBookingConfirmation, sendStudioNotification } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -28,21 +28,25 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Bestätigung senden (Fehler beim Versand dürfen die Buchung nicht kippen)
+    // Bestätigungen senden (Fehler beim Versand dürfen die Buchung nicht kippen)
     const row = await getAppointmentByToken(result.cancelToken);
     if (row) {
-      await sendBookingConfirmation(
-        {
-          firstName: row.customer.firstName,
-          email: row.customer.email,
-          phone: row.customer.phone,
-        },
-        {
-          treatmentName: row.treatment.name,
-          startsAt: row.appointment.startsAt,
-          cancelToken: row.appointment.cancelToken,
-        },
-      ).catch((err) => console.error("[bookings] Versand fehlgeschlagen:", err));
+      const info = {
+        treatmentName: row.treatment.name,
+        startsAt: row.appointment.startsAt,
+        cancelToken: row.appointment.cancelToken,
+      };
+      await Promise.allSettled([
+        sendBookingConfirmation(
+          {
+            firstName: row.customer.firstName,
+            email: row.customer.email,
+            phone: row.customer.phone,
+          },
+          info,
+        ),
+        sendStudioNotification("booked", row.customer, info),
+      ]);
     }
 
     return NextResponse.json({ cancelToken: result.cancelToken }, { status: 201 });

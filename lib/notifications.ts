@@ -109,6 +109,38 @@ export async function sendReminder(
   ]);
 }
 
+/**
+ * Info ans Studio bei jeder Buchung/Stornierung – so braucht es (noch) keinen
+ * Admin-Bereich: Das Studio pflegt seinen Kalender direkt aus der Mail.
+ */
+export async function sendStudioNotification(
+  kind: "booked" | "cancelled",
+  customer: { firstName: string; lastName: string; email: string; phone: string },
+  appt: { treatmentName: string; startsAt: Date },
+): Promise<void> {
+  const to = process.env.STUDIO_NOTIFY_EMAIL;
+  if (!to) {
+    console.warn("[notifications] Studio-Info übersprungen (STUDIO_NOTIFY_EMAIL fehlt)");
+    return;
+  }
+  const when = formatDateTime(appt.startsAt);
+  const verb = kind === "booked" ? "Neue Buchung" : "Stornierung";
+  await sendEmail(
+    to,
+    `${verb}: ${appt.treatmentName} – ${when}`,
+    [
+      `${verb} über die Website:`,
+      ``,
+      `Behandlung: ${appt.treatmentName}`,
+      `Termin: ${when}`,
+      ``,
+      `Kundin/Kunde: ${customer.firstName} ${customer.lastName}`,
+      `Telefon: ${customer.phone}`,
+      `E-Mail: ${customer.email}`,
+    ].join("\n"),
+  );
+}
+
 export async function sendCancellationConfirmation(
   target: NotificationTarget,
   appt: AppointmentInfo,
