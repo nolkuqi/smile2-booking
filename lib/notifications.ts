@@ -16,9 +16,7 @@ export interface AppointmentInfo {
   cancelToken: string;
 }
 
-function baseUrl(): string {
-  return process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
-}
+import { baseUrl } from "@/lib/base-url";
 
 async function sendEmail(to: string, subject: string, text: string): Promise<void> {
   const key = process.env.RESEND_API_KEY;

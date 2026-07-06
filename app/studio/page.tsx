@@ -22,7 +22,18 @@ export default async function StudioPage({
   const { key } = await searchParams;
   const accessKey = process.env.STUDIO_ACCESS_KEY;
 
-  if (!accessKey || key !== accessKey) {
+  if (!accessKey) {
+    return (
+      <div className="mx-auto max-w-xl px-4 py-16 text-center text-slate-600">
+        <h1 className="text-2xl font-semibold text-slate-900">Nicht konfiguriert</h1>
+        <p className="mt-2">
+          Die Umgebungsvariable <code>STUDIO_ACCESS_KEY</code> ist nicht gesetzt.
+        </p>
+      </div>
+    );
+  }
+
+  if (key?.trim() !== accessKey.trim()) {
     return (
       <div className="mx-auto max-w-xl px-4 py-16 text-center text-slate-600">
         <h1 className="text-2xl font-semibold text-slate-900">Kein Zugriff</h1>

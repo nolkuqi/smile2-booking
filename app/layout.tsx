@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import Link from "next/link";
+import { baseUrl } from "@/lib/base-url";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -9,7 +10,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(baseUrl()),
   title: {
     default: "Smile² – Professionelle Zahnaufhellung in St. Gallen",
     template: "%s | Smile²",
