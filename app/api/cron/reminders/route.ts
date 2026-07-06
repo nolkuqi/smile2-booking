@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
+import { TZDate } from "@date-fns/tz";
 import { and, eq, gte, isNull, lt } from "drizzle-orm";
 import { getDb, schema } from "@/db";
+import { STUDIO_TZ } from "@/lib/availability";
 import { sendReminder } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
 /**
- * Stündlich via Vercel Cron aufgerufen (siehe vercel.json).
- * Erinnert an bestätigte Termine, die in 23–25 h beginnen.
+ * Täglich um 17:00 UTC via Vercel Cron aufgerufen (siehe vercel.json;
+ * Hobby-Plan erlaubt nur tägliche Crons). Erinnert an alle bestätigten
+ * Termine des morgigen Tages (Studio-Zeitzone).
  */
 export async function GET(req: NextRequest) {
   const secret = process.env.CRON_SECRET;
@@ -16,8 +19,13 @@ export async function GET(req: NextRequest) {
   }
 
   const db = getDb();
-  const from = new Date(Date.now() + 23 * 3600_000);
-  const to = new Date(Date.now() + 25 * 3600_000);
+  const today = new TZDate(Date.now(), STUDIO_TZ);
+  const from = new Date(
+    new TZDate(today.getFullYear(), today.getMonth(), today.getDate() + 1, 0, 0, 0, STUDIO_TZ).getTime(),
+  );
+  const to = new Date(
+    new TZDate(today.getFullYear(), today.getMonth(), today.getDate() + 2, 0, 0, 0, STUDIO_TZ).getTime(),
+  );
 
   const due = await db
     .select({
