@@ -1,11 +1,14 @@
 # Smile² – Website & Buchungssystem
 
+[![CI](https://github.com/nolkuqi/smile2-booking/actions/workflows/ci.yml/badge.svg)](https://github.com/nolkuqi/smile2-booking/actions/workflows/ci.yml)
+**Live:** [smile2-booking.vercel.app](https://smile2-booking.vercel.app)
+
 Neue Website mit integriertem Terminbuchungssystem für [Smile²](https://smilehochzwei.ch/),
 ein Zahnbleaching-Studio in St. Gallen. Ersetzt das bisherige Buchungswidget durch eine
 massgeschneiderte, kostenlose Lösung: Online-Buchung ohne Kundenkonto, automatische
 E-Mail-/SMS-Erinnerungen und ein Admin-Bereich für das Studio.
 
-## Features (geplant)
+## Features
 
 - 📅 Terminbuchung mit Live-Verfügbarkeiten (Öffnungszeiten, Pausen, Ferien)
 - 📱 Mobile-first Buchungs-Wizard ohne Registrierung

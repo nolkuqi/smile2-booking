@@ -17,6 +17,15 @@ export const metadata: Metadata = {
   description:
     "Smile² steht für ästhetische Zahnaufhellung auf höchstem Niveau – schonend, individuell und mit Termin-Onlinebuchung. Feldlistrasse 17, St. Gallen.",
   robots: { index: true, follow: true },
+  openGraph: {
+    title: "Smile² – Professionelle Zahnaufhellung in St. Gallen",
+    description:
+      "Schonende, kosmetische Zahnaufhellung mit persönlicher Beratung. Termin online buchen – in 2 Minuten.",
+    url: "/",
+    siteName: "Smile²",
+    locale: "de_CH",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
