@@ -60,12 +60,33 @@ function nextDays(n: number): Date[] {
   });
 }
 
+/** Montag der Woche, in der `d` (Studio-Zeit) liegt. */
+function mondayOf(d: Date): Date {
+  const copy = new Date(d);
+  const wd = weekdayInZurich(copy); // 0 = So … 6 = Sa
+  copy.setDate(copy.getDate() - ((wd + 6) % 7));
+  return copy;
+}
+
+/** 7 Tage der Woche mit Offset (0 = aktuelle Woche). */
+function weekDays(offset: number): Date[] {
+  const monday = mondayOf(new Date());
+  return Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + offset * 7 + i);
+    return d;
+  });
+}
+
+const MAX_WEEKS = 6;
+
 export default function BookingWizard() {
   const [step, setStep] = useState<Step>("treatment");
   const [treatments, setTreatments] = useState<Treatment[] | null>(null);
   const [treatment, setTreatment] = useState<Treatment | null>(null);
   const [openDays, setOpenDays] = useState<number[] | null>(null);
-  const days = useMemo(() => nextDays(28), []);
+  const days = useMemo(() => nextDays(MAX_WEEKS * 7), []);
+  const [weekOffset, setWeekOffset] = useState(0);
   const [date, setDate] = useState<string | null>(null);
   const [slots, setSlots] = useState<string[] | null>(null);
   const [slot, setSlot] = useState<string | null>(null);
@@ -103,8 +124,15 @@ export default function BookingWizard() {
   function chooseTreatment(t: Treatment) {
     setTreatment(t);
     setStep("slot");
-    const initial = date ?? (firstOpenDay ? toDateStr(firstOpenDay) : toDateStr(days[0]));
+    const initialDay = firstOpenDay ?? days[0];
+    const initial = date ?? toDateStr(initialDay);
     setDate(initial);
+    // Woche des gewählten Tages anzeigen
+    const monday = mondayOf(new Date());
+    const diffDays = Math.round(
+      (new Date(`${initial}T12:00:00`).getTime() - monday.getTime()) / 86_400_000,
+    );
+    setWeekOffset(Math.min(MAX_WEEKS - 1, Math.max(0, Math.floor(diffDays / 7))));
     loadSlots(t.id, initial);
   }
 
@@ -190,32 +218,58 @@ export default function BookingWizard() {
             {treatment.name} · {treatment.durationMin} Minuten
           </p>
 
-          <div className="-mx-4 mt-8 flex gap-2 overflow-x-auto px-4 pb-2">
-            {days.map((d) => {
-              const ds = toDateStr(d);
-              const closed = openDays ? !openDays.includes(weekdayInZurich(d)) : false;
-              const active = ds === date;
-              return (
-                <button
-                  key={ds}
-                  disabled={closed}
-                  onClick={() => {
-                    setDate(ds);
-                    loadSlots(treatment.id, ds);
-                  }}
-                  className={`flex w-16 shrink-0 flex-col items-center gap-0.5 border py-2.5 text-sm transition ${
-                    active
-                      ? "border-brand bg-brand text-white"
-                      : closed
-                        ? "cursor-not-allowed border-sand bg-cream text-ink-soft/40"
-                        : "border-sand bg-white text-ink hover:border-brand"
-                  }`}
-                >
-                  <span className="text-xs uppercase tracking-wider">{fmtWeekday(d)}</span>
-                  <span className="font-medium">{fmtDayNum(d)}</span>
-                </button>
-              );
-            })}
+          <div className="mt-8">
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                aria-label="Vorherige Woche"
+                disabled={weekOffset === 0}
+                onClick={() => setWeekOffset((w) => Math.max(0, w - 1))}
+                className="flex h-10 w-10 items-center justify-center border border-sand bg-white text-ink transition enabled:hover:border-brand disabled:opacity-30"
+              >
+                ‹
+              </button>
+              <p className="text-sm font-medium tracking-wide text-ink">
+                {fmtDayNum(weekDays(weekOffset)[0])} – {fmtDayNum(weekDays(weekOffset)[6])}
+              </p>
+              <button
+                type="button"
+                aria-label="Nächste Woche"
+                disabled={weekOffset >= MAX_WEEKS - 1}
+                onClick={() => setWeekOffset((w) => Math.min(MAX_WEEKS - 1, w + 1))}
+                className="flex h-10 w-10 items-center justify-center border border-sand bg-white text-ink transition enabled:hover:border-brand disabled:opacity-30"
+              >
+                ›
+              </button>
+            </div>
+            <div className="mt-3 grid grid-cols-7 gap-1.5 sm:gap-2">
+              {weekDays(weekOffset).map((d) => {
+                const ds = toDateStr(d);
+                const past = ds <= toDateStr(new Date()); // buchbar ab morgen
+                const closed = past || (openDays ? !openDays.includes(weekdayInZurich(d)) : false);
+                const active = ds === date;
+                return (
+                  <button
+                    key={ds}
+                    disabled={closed}
+                    onClick={() => {
+                      setDate(ds);
+                      loadSlots(treatment.id, ds);
+                    }}
+                    className={`flex flex-col items-center gap-0.5 border py-2.5 text-sm transition ${
+                      active
+                        ? "border-brand bg-brand text-white"
+                        : closed
+                          ? "cursor-not-allowed border-sand/60 bg-cream text-ink-soft/35"
+                          : "border-sand bg-white text-ink hover:border-brand"
+                    }`}
+                  >
+                    <span className="text-[11px] uppercase tracking-wider">{fmtWeekday(d)}</span>
+                    <span className="font-medium">{Number(ds.slice(8))}.</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="mt-8">
