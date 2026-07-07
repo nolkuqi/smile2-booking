@@ -1,7 +1,13 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-josefin);
+  --color-cream: #f7f3ee;
+  --color-sand: #eae2da;
+  --color-brand: #c8b6a6;
+  --color-brand-dark: #b39f8d;
+  --color-ink: #26201a;
+  --color-ink-soft: #5c5347;
 }
 
 html {

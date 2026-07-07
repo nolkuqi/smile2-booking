@@ -4,8 +4,8 @@ export const metadata: Metadata = { title: "Datenschutz", robots: { index: false
 
 export default function DatenschutzPage() {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-12 text-slate-700">
-      <h1 className="text-2xl font-semibold text-slate-900">Datenschutzerklärung</h1>
+    <div className="mx-auto max-w-2xl px-4 py-12 text-ink-soft">
+      <h1 className="text-3xl font-semibold tracking-wide text-ink">Datenschutzerklärung</h1>
       <div className="mt-6 space-y-4 leading-relaxed">
         <p>
           Für die Terminbuchung erheben wir nur die Daten, die wir zur Durchführung des Termins

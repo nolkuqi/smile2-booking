@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Josefin_Sans } from "next/font/google";
 import Link from "next/link";
 import { baseUrl } from "@/lib/base-url";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const josefin = Josefin_Sans({
+  variable: "--font-josefin",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -35,23 +36,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de-CH" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-white text-slate-800">
-        <header className="sticky top-0 z-20 border-b border-slate-100 bg-white/90 backdrop-blur">
-          <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-            <Link href="/" className="text-xl font-semibold tracking-tight text-teal-700">
+    <html lang="de-CH" className={`${josefin.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col bg-cream font-sans text-ink">
+        <header className="sticky top-0 z-20 border-b border-sand bg-cream/95 backdrop-blur">
+          <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
+            <Link
+              href="/"
+              className="text-lg font-semibold uppercase tracking-[0.25em] text-ink"
+            >
               Smile<sup>2</sup>
             </Link>
-            <nav className="flex items-center gap-6 text-sm">
-              <Link href="/#ueber-uns" className="hidden text-slate-600 hover:text-teal-700 sm:block">
+            <nav className="flex items-center gap-7 text-sm tracking-wide">
+              <Link href="/#ueber-uns" className="hidden text-ink-soft transition hover:text-ink sm:block">
                 Über uns
               </Link>
-              <Link href="/#kontakt" className="hidden text-slate-600 hover:text-teal-700 sm:block">
+              <Link href="/#kontakt" className="hidden text-ink-soft transition hover:text-ink sm:block">
                 Kontakt
               </Link>
               <Link
                 href="/buchen"
-                className="rounded-full bg-teal-600 px-4 py-2 font-medium text-white transition hover:bg-teal-700"
+                className="rounded-[3px] bg-brand px-5 py-2.5 font-medium tracking-wide text-white transition hover:bg-brand-dark"
               >
                 Termin buchen
               </Link>
@@ -61,30 +65,30 @@ export default function RootLayout({
 
         <main className="flex-1">{children}</main>
 
-        <footer className="border-t border-slate-100 bg-slate-50">
-          <div className="mx-auto grid max-w-5xl gap-8 px-4 py-10 text-sm text-slate-600 sm:grid-cols-3">
+        <footer className="border-t border-sand bg-sand">
+          <div className="mx-auto grid max-w-5xl gap-8 px-4 py-12 text-sm text-ink-soft sm:grid-cols-3">
             <div>
-              <p className="font-semibold text-slate-800">
+              <p className="font-semibold uppercase tracking-[0.2em] text-ink">
                 Smile<sup>2</sup>
               </p>
-              <p className="mt-2">
+              <p className="mt-3 leading-relaxed">
                 Feldlistrasse 17
                 <br />
                 9000 St. Gallen
               </p>
-              <p className="mt-2">
-                <a href="tel:+41765677693" className="hover:text-teal-700">
+              <p className="mt-3 leading-relaxed">
+                <a href="tel:+41765677693" className="transition hover:text-ink">
                   076 567 76 93
                 </a>
                 <br />
-                <a href="mailto:smilehochzwei@gmail.com" className="hover:text-teal-700">
+                <a href="mailto:smilehochzwei@gmail.com" className="transition hover:text-ink">
                   smilehochzwei@gmail.com
                 </a>
               </p>
             </div>
             <div>
-              <p className="font-semibold text-slate-800">Öffnungszeiten</p>
-              <p className="mt-2">
+              <p className="font-semibold uppercase tracking-[0.2em] text-ink">Öffnungszeiten</p>
+              <p className="mt-3 leading-relaxed">
                 Mo, Fr: 09–13 / 14–18 Uhr
                 <br />
                 Do: 09–13 / 14–19 Uhr
@@ -95,16 +99,16 @@ export default function RootLayout({
               </p>
             </div>
             <div>
-              <p className="font-semibold text-slate-800">Rechtliches</p>
-              <p className="mt-2 flex flex-col gap-1">
-                <Link href="/impressum" className="hover:text-teal-700">
+              <p className="font-semibold uppercase tracking-[0.2em] text-ink">Rechtliches</p>
+              <p className="mt-3 flex flex-col gap-1.5">
+                <Link href="/impressum" className="transition hover:text-ink">
                   Impressum
                 </Link>
-                <Link href="/datenschutz" className="hover:text-teal-700">
+                <Link href="/datenschutz" className="transition hover:text-ink">
                   Datenschutz
                 </Link>
               </p>
-              <p className="mt-4 text-xs text-slate-400">
+              <p className="mt-5 text-xs text-ink-soft/70">
                 © {new Date().getFullYear()} Smilehochzwei™
               </p>
             </div>

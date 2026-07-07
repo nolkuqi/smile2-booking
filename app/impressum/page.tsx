@@ -4,8 +4,8 @@ export const metadata: Metadata = { title: "Impressum", robots: { index: false }
 
 export default function ImpressumPage() {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-12 text-slate-700">
-      <h1 className="text-2xl font-semibold text-slate-900">Impressum</h1>
+    <div className="mx-auto max-w-2xl px-4 py-12 text-ink-soft">
+      <h1 className="text-3xl font-semibold tracking-wide text-ink">Impressum</h1>
       <div className="mt-6 space-y-4 leading-relaxed">
         <p>
           Smile² – Zahnbleaching-Studio

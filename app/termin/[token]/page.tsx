@@ -22,10 +22,10 @@ export default async function TerminPage({
   if (!row) {
     return (
       <Shell>
-        <h1 className="text-2xl font-semibold text-slate-900">Termin nicht gefunden</h1>
-        <p className="mt-2 text-slate-600">
+        <h1 className="text-3xl font-semibold tracking-wide text-ink">Termin nicht gefunden</h1>
+        <p className="mt-2 text-ink-soft">
           Der Link ist ungültig. Bei Fragen erreichst du uns unter{" "}
-          <a href="tel:+41765677693" className="text-teal-700">076 567 76 93</a>.
+          <a href="tel:+41765677693" className="text-brand-dark">076 567 76 93</a>.
         </p>
       </Shell>
     );
@@ -36,27 +36,27 @@ export default async function TerminPage({
 
   return (
     <Shell>
-      <h1 className="text-2xl font-semibold text-slate-900">Dein Termin</h1>
+      <h1 className="text-3xl font-semibold tracking-wide text-ink">Dein Termin</h1>
 
-      <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <p className="font-semibold text-slate-900">{treatment.name}</p>
-        <p className="mt-1 text-slate-600">{formatDateTime(appointment.startsAt)}</p>
-        <p className="mt-1 text-sm text-slate-500">
+      <div className="mt-6 border border-sand bg-white p-6">
+        <p className="font-semibold text-ink">{treatment.name}</p>
+        <p className="mt-1 text-ink-soft">{formatDateTime(appointment.startsAt)}</p>
+        <p className="mt-1 text-sm text-ink-soft">
           {treatment.durationMin} Min. · {formatPrice(treatment.priceChf)} · Feldlistrasse 17, 9000 St. Gallen
         </p>
         <p className="mt-3">
           {appointment.status === "confirmed" && (
-            <span className="rounded-full bg-teal-100 px-3 py-1 text-xs font-medium text-teal-800">
+            <span className="bg-sand px-3 py-1 text-xs font-medium tracking-wide text-ink">
               Bestätigt
             </span>
           )}
           {appointment.status === "cancelled" && (
-            <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800">
+            <span className="bg-red-100 px-3 py-1 text-xs font-medium tracking-wide text-red-800">
               Storniert
             </span>
           )}
           {appointment.status === "completed" && (
-            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+            <span className="bg-sand px-3 py-1 text-xs font-medium tracking-wide text-ink-soft">
               Abgeschlossen
             </span>
           )}
@@ -67,7 +67,7 @@ export default async function TerminPage({
         <div className="mt-6 grid gap-3">
           <a
             href={`/api/ics/${token}`}
-            className="rounded-full border border-teal-600 px-6 py-2 text-center text-sm font-medium text-teal-700 hover:bg-teal-50"
+            className="rounded-[3px] border border-brand px-6 py-3 text-center text-sm font-medium tracking-wide text-brand-dark transition hover:bg-brand hover:text-white"
           >
             📅 Zum Kalender hinzufügen
           </a>
@@ -75,19 +75,19 @@ export default async function TerminPage({
             <form action={cancelAction.bind(null, token)} className="grid gap-3">
               <button
                 type="submit"
-                className="rounded-full border border-red-300 px-6 py-2 text-sm font-medium text-red-700 hover:bg-red-50"
+                className="rounded-[3px] border border-red-300 px-6 py-3 text-sm font-medium text-red-700 transition hover:bg-red-50"
               >
                 Termin stornieren
               </button>
-              <p className="text-center text-xs text-slate-400">
+              <p className="text-center text-xs text-ink-soft/70">
                 Zum Verschieben: stornieren und neu buchen. Kostenlos möglich bis{" "}
                 {CANCEL_DEADLINE_HOURS} h vor dem Termin.
               </p>
             </form>
           ) : (
-            <p className="text-center text-sm text-slate-500">
+            <p className="text-center text-sm text-ink-soft">
               Eine Online-Stornierung ist nur bis {CANCEL_DEADLINE_HOURS} h vor dem Termin möglich.
-              Bitte melde dich telefonisch: <a href="tel:+41765677693" className="text-teal-700">076 567 76 93</a>
+              Bitte melde dich telefonisch: <a href="tel:+41765677693" className="text-brand-dark">076 567 76 93</a>
             </p>
           )}
         </div>
@@ -97,7 +97,7 @@ export default async function TerminPage({
         <div className="mt-6 text-center">
           <Link
             href="/buchen"
-            className="rounded-full bg-teal-600 px-8 py-3 font-medium text-white transition hover:bg-teal-700"
+            className="rounded-[3px] bg-brand px-10 py-4 font-medium tracking-wide text-white transition hover:bg-brand-dark"
           >
             Neuen Termin buchen
           </Link>
